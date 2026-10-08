@@ -234,3 +234,134 @@ body {
     color: var(--primary);
     font-weight: bold;
 }
+.mushaf-page {
+    width: 100%;
+    max-width: 500px;
+    margin: 18px auto 30px;
+    padding: 8px;
+
+    background: #fff;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.08);
+
+    overflow: hidden;
+}
+
+.mushaf-page svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+.word-panel {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: flex-end;
+
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.word-panel-content {
+    width: 100%;
+
+    padding: 22px 16px 28px;
+
+    background: #fff;
+
+    border-radius: 22px 22px 0 0;
+
+    box-shadow:
+        0 -5px 25px rgba(0, 0, 0, 0.15);
+}
+
+.word-close {
+    float: left;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    cursor: pointer;
+}
+
+.selected-word {
+    clear: both;
+
+    padding: 12px;
+
+    text-align: center;
+
+    font-size: 30px;
+
+    color: var(--primary);
+}
+
+.word-key {
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 12px;
+
+    direction: ltr;
+}
+
+.word-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.word-actions button {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 4px;
+
+    padding: 10px 5px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    background: var(--bg);
+
+    color: var(--text);
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+.word-actions button span {
+    font-size: 12px;
+}
+
+.ayah-reference {
+    margin-top: 18px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 13px;
+} 
