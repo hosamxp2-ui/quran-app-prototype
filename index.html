@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>القرآن الكريم</title>
+
+    <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+    <header class="app-header">
+        <div>
+            <h1>القرآن الكريم</h1>
+            <p>مصحف • قراءة • تدبر • حفظ</p>
+        </div>
+
+        <button id="themeButton" class="icon-button" aria-label="تغيير المظهر">
+            ☾
+        </button>
+    </header>
+
+
+    <main id="app">
+
+        <section class="welcome-card">
+            <span class="welcome-icon">﷽</span>
+
+            <h2>بسم الله الرحمن الرحيم</h2>
+
+            <p>
+                القرآن الكريم
+            </p>
+
+            <button id="continueButton" class="primary-button">
+                متابعة القراءة
+            </button>
+        </section>
+
+
+        <section class="section">
+
+            <div class="section-title">
+                <h2>المصحف</h2>
+            </div>
+
+            <div id="surahList" class="surah-list">
+                <!-- سيتم تحميل السور هنا -->
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <nav class="bottom-nav">
+
+        <button class="nav-item active">
+            <span>⌂</span>
+            <small>الرئيسية</small>
+        </button>
+
+        <button class="nav-item">
+            <span>▤</span>
+            <small>المصحف</small>
+        </button>
+
+        <button class="nav-item">
+            <span>⌕</span>
+            <small>بحث</small>
+        </button>
+
+        <button class="nav-item">
+            <span>♫</span>
+            <small>الصوت</small>
+        </button>
+
+        <button class="nav-item">
+            <span>☰</span>
+            <small>المزيد</small>
+        </button>
+
+    </nav>
+
+
+    <script src="data/quran.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
