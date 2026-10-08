@@ -1,3 +1,4 @@
+alert("تم تحميل app.js بنجاح");
 document.addEventListener("DOMContentLoaded", () => {
 
     const surahList = document.getElementById("surahList");
