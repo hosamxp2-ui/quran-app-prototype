@@ -1,32 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     const app = document.getElementById("app");
-    const surahList = document.getElementById("surahList");
     const themeButton = document.getElementById("themeButton");
-    const continueButton = document.getElementById("continueButton");
+
+    const ELEMENTS_BASE =
+        "https://raw.githubusercontent.com/quran-ws/quran-svg-elements/main/pages/";
 
 
-    if (
-        typeof QURAN_DATA === "undefined" ||
-        !QURAN_DATA.surahs
-    ) {
-        surahList.innerHTML = `
-            <div class="surah-card">
-                <div class="surah-info">
-                    <h3 class="surah-name">
-                        تعذر تحميل بيانات القرآن
-                    </h3>
-                </div>
-            </div>
-        `;
+    // =========================
+    // بيانات المشروع
+    // =========================
 
-        return;
-    }
+    const surahs = QURAN_DATA.surahs;
 
 
-    /*
-     * الصفحة الرئيسية
-     */
+    // =========================
+    // الصفحة الرئيسية
+    // =========================
+
     function renderHome() {
 
         app.innerHTML = `
@@ -37,9 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 <h2>بسم الله الرحمن الرحيم</h2>
 
-                <p>
-                    القرآن الكريم
-                </p>
+                <p>القرآن الكريم</p>
 
                 <button
                     id="continueButton"
@@ -49,54 +38,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
             </section>
 
-
             <section class="section">
 
                 <div class="section-title">
                     <h2>المصحف</h2>
                 </div>
 
-                <div id="surahList" class="surah-list">
-                </div>
+                <div id="surahList" class="surah-list"></div>
 
             </section>
         `;
 
 
-        const newSurahList =
+        const list =
             document.getElementById("surahList");
 
 
-        const newContinueButton =
-            document.getElementById("continueButton");
-
-
-        renderSurahs(newSurahList);
-
-
-        newContinueButton.addEventListener(
-            "click",
-            continueReading
-        );
-    }
-
-
-    /*
-     * عرض السور
-     */
-    function renderSurahs(container) {
-
-        container.innerHTML = "";
-
-
-        QURAN_DATA.surahs.forEach((surah) => {
+        surahs.forEach((surah) => {
 
             const card =
                 document.createElement("button");
 
-            card.className = "surah-card";
-
             card.type = "button";
+            card.className = "surah-card";
 
 
             card.innerHTML = `
@@ -124,25 +88,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
             card.addEventListener(
                 "click",
-                () => openSurah(surah)
+                () => {
+
+                    if (surah.id === 1) {
+                        openMushafPage(1);
+                    } else {
+                        alert(
+                            "سنضيف صفحات هذه السورة لاحقًا."
+                        );
+                    }
+
+                }
             );
 
 
-            container.appendChild(card);
+            list.appendChild(card);
+
         });
+
+
+        document
+            .getElementById("continueButton")
+            .addEventListener(
+                "click",
+                continueReading
+            );
     }
 
 
-    /*
-     * فتح السورة
-     */
-    function openSurah(surah) {
+    // =========================
+    // فتح صفحة المصحف
+    // =========================
 
-        localStorage.setItem(
-            "lastSurah",
-            String(surah.id)
-        );
-
+    async function openMushafPage(pageNumber) {
 
         app.innerHTML = `
 
@@ -154,45 +132,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     ← العودة إلى السور
                 </button>
 
+                <div
+                    id="mushafLoading"
+                    class="welcome-card">
 
-                <div class="welcome-card">
-
-                    <span class="welcome-icon">
-                        ﷽
-                    </span>
-
-                    <h2>
-                        سورة ${surah.name}
-                    </h2>
+                    <h2>جاري تحميل صفحة المصحف</h2>
 
                     <p>
-                        ${surah.revelation}
-                        •
-                        ${surah.ayahCount} آية
+                        صفحة ${pageNumber}
                     </p>
 
                 </div>
 
-
-                <div class="section">
-
-                    <div class="surah-card">
-
-                        <div class="surah-info">
-
-                            <h3 class="surah-name">
-                                شاشة القراءة
-                            </h3>
-
-                            <p class="surah-details">
-                                سيتم هنا عرض آيات السورة
-                                في الخطوة التالية.
-                            </p>
-
-                        </div>
-
-                    </div>
-
+                <div
+                    id="mushafPage"
+                    class="mushaf-page">
                 </div>
 
             </section>
@@ -205,79 +159,360 @@ document.addEventListener("DOMContentLoaded", () => {
                 "click",
                 renderHome
             );
+
+
+        try {
+
+            const page =
+                String(pageNumber).padStart(3, "0");
+
+
+            const url =
+                `${ELEMENTS_BASE}${page}.svg`;
+
+
+            const response =
+                await fetch(url);
+
+
+            if (!response.ok) {
+                throw new Error(
+                    `HTTP ${response.status}`
+                );
+            }
+
+
+            const svgText =
+                await response.text();
+
+
+            const container =
+                document.getElementById(
+                    "mushafPage"
+                );
+
+
+            container.innerHTML =
+                svgText;
+
+
+            const svg =
+                container.querySelector("svg");
+
+
+            if (!svg) {
+                throw new Error(
+                    "SVG غير موجود"
+                );
+            }
+
+
+            svg.removeAttribute("width");
+            svg.removeAttribute("height");
+
+
+            svg.style.width = "100%";
+            svg.style.height = "auto";
+            svg.style.display = "block";
+
+
+            /*
+             * إزالة رسالة التحميل
+             */
+
+            document
+                .getElementById("mushafLoading")
+                .remove();
+
+
+            /*
+             * التفاعل مع الكلمات
+             */
+
+            svg.addEventListener(
+                "click",
+                handleWordClick
+            );
+
+
+            /*
+             * توسيع منطقة اللمس
+             * دون تغيير شكل المصحف
+             */
+
+            const wordPaths =
+                svg.querySelectorAll(
+                    "g.word path"
+                );
+
+
+            wordPaths.forEach((path) => {
+
+                path.style.pointerEvents =
+                    "all";
+
+                path.style.stroke =
+                    "transparent";
+
+                path.style.strokeWidth =
+                    "1.5";
+
+                path.style.paintOrder =
+                    "stroke fill";
+
+            });
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            const loading =
+                document.getElementById(
+                    "mushafLoading"
+                );
+
+
+            loading.innerHTML = `
+
+                <h2>
+                    تعذر تحميل صفحة المصحف
+                </h2>
+
+                <p>
+                    تحقق من اتصال الإنترنت ثم حاول مرة أخرى.
+                </p>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            `;
+
+        }
+
     }
 
 
-    /*
-     * متابعة القراءة
-     */
-    function continueReading() {
+    // =========================
+    // الضغط على كلمة
+    // =========================
 
-        const lastSurahId =
-            localStorage.getItem("lastSurah");
+    function handleWordClick(event) {
 
-
-        if (!lastSurahId) {
-
-            alert(
-                "لم يتم تحديد موضع قراءة سابق بعد."
+        const word =
+            event.target.closest(
+                "g.word"
             );
 
+
+        if (!word) {
             return;
         }
 
 
-        const surah =
-            QURAN_DATA.surahs.find(
-                item =>
-                    String(item.id) === lastSurahId
+        const wordKey =
+            word.dataset.wordKey;
+
+
+        const ayah =
+            word.closest(
+                "g.ayah-fragment"
             );
 
 
-        if (surah) {
-            openSurah(surah);
-        }
+        const ayahKey =
+            ayah
+                ? ayah.dataset.ayahKey
+                : "";
+
+
+        const text =
+            word.dataset.rasmUthmani ||
+            "كلمة قرآنية";
+
+
+        showWordPanel(
+            wordKey,
+            ayahKey,
+            text
+        );
+
     }
 
 
-    /*
-     * الوضع الليلي
-     */
-    themeButton.addEventListener("click", () => {
+    // =========================
+    // لوحة الكلمة
+    // =========================
 
-        document.body.classList.toggle(
-            "dark-mode"
-        );
+    function showWordPanel(
+        wordKey,
+        ayahKey,
+        text
+    ) {
+
+        const oldPanel =
+            document.getElementById(
+                "wordPanel"
+            );
 
 
-        const dark =
-            document.body.classList.contains(
+        if (oldPanel) {
+            oldPanel.remove();
+        }
+
+
+        const panel =
+            document.createElement("div");
+
+
+        panel.id = "wordPanel";
+        panel.className = "word-panel";
+
+
+        panel.innerHTML = `
+
+            <div class="word-panel-content">
+
+                <button
+                    id="closeWordPanel"
+                    class="word-close">
+                    ×
+                </button>
+
+                <div class="selected-word">
+                    ${text}
+                </div>
+
+                <div class="word-key">
+                    ${wordKey}
+                </div>
+
+                <div class="word-actions">
+
+                    <button>
+                        🔊
+                        <span>استماع</span>
+                    </button>
+
+                    <button>
+                        📖
+                        <span>المعنى</span>
+                    </button>
+
+                    <button>
+                        ⚙
+                        <span>الإعراب</span>
+                    </button>
+
+                    <button>
+                        🔤
+                        <span>الجذر</span>
+                    </button>
+
+                    <button>
+                        📌
+                        <span>حفظ</span>
+                    </button>
+
+                    <button>
+                        📝
+                        <span>ملاحظة</span>
+                    </button>
+
+                </div>
+
+                <div class="ayah-reference">
+
+                    الآية:
+                    ${ayahKey || "غير محدد"}
+
+                </div>
+
+            </div>
+        `;
+
+
+        document.body.appendChild(panel);
+
+
+        document
+            .getElementById(
+                "closeWordPanel"
+            )
+            .addEventListener(
+                "click",
+                () => panel.remove()
+            );
+
+    }
+
+
+    // =========================
+    // متابعة القراءة
+    // =========================
+
+    function continueReading() {
+
+        const page =
+            localStorage.getItem(
+                "lastPage"
+            );
+
+
+        if (page) {
+            openMushafPage(
+                Number(page)
+            );
+        } else {
+            openMushafPage(1);
+        }
+
+    }
+
+
+    // =========================
+    // الوضع الليلي
+    // =========================
+
+    themeButton.addEventListener(
+        "click",
+        () => {
+
+            document.body.classList.toggle(
                 "dark-mode"
             );
 
 
-        localStorage.setItem(
-            "darkMode",
-            dark ? "1" : "0"
-        );
-    });
+            localStorage.setItem(
+                "darkMode",
+                document.body.classList.contains(
+                    "dark-mode"
+                )
+                    ? "1"
+                    : "0"
+            );
+
+        }
+    );
 
 
-    /*
-     * استعادة الوضع الليلي
-     */
     if (
         localStorage.getItem("darkMode") === "1"
     ) {
+
         document.body.classList.add(
             "dark-mode"
         );
+
     }
 
 
-    /*
-     * التشغيل الأول
-     */
+    // =========================
+    // تشغيل التطبيق
+    // =========================
+
     renderHome();
 
 });
