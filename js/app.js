@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeButton = document.getElementById("themeButton");
 
     const ELEMENTS_BASE =
-        "https://raw.githubusercontent.com/quran-ws/quran-svg-elements/main/pages/";
+    "https://cdn.quran.ws/svg/elements/v1.1.1/pages/";
 
 
     // =========================
