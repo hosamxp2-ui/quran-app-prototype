@@ -1,1 +1,236 @@
+* {
+    box-sizing: border-box;
+}
 
+:root {
+    --bg: #f5f3ed;
+    --surface: #ffffff;
+    --text: #202124;
+    --muted: #777;
+    --border: #e5e2da;
+    --primary: #176b4d;
+    --primary-soft: #e8f2ed;
+}
+
+body {
+    margin: 0;
+    padding-bottom: 80px;
+
+    background: var(--bg);
+    color: var(--text);
+
+    font-family:
+        "Noto Naskh Arabic",
+        "Amiri",
+        "Tahoma",
+        Arial,
+        sans-serif;
+
+    line-height: 1.8;
+}
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 18px 16px;
+
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.app-header p {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.icon-button {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--border);
+    border-radius: 50%;
+
+    background: var(--surface);
+    color: var(--text);
+
+    font-size: 20px;
+}
+
+#app {
+    width: 100%;
+    max-width: 700px;
+
+    margin: auto;
+    padding: 18px 14px;
+}
+
+.welcome-card {
+    padding: 28px 20px;
+    margin-bottom: 24px;
+
+    text-align: center;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 20px;
+
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.welcome-icon {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 38px;
+}
+
+.welcome-card h2 {
+    margin: 5px 0;
+
+    font-size: 22px;
+}
+
+.welcome-card p {
+    margin: 0 0 18px;
+
+    color: var(--muted);
+}
+
+.primary-button {
+    border: none;
+    border-radius: 12px;
+
+    padding: 11px 22px;
+
+    background: var(--primary);
+    color: white;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.section-title {
+    margin-bottom: 12px;
+}
+
+.section-title h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.surah-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.surah-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    padding: 14px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+}
+
+.surah-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 12px;
+
+    background: var(--primary-soft);
+    color: var(--primary);
+
+    font-weight: bold;
+}
+
+.surah-info {
+    flex: 1;
+}
+
+.surah-name {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+.surah-details {
+    margin: 2px 0 0;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.bottom-nav {
+    position: fixed;
+
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: space-around;
+
+    height: 68px;
+
+    background: var(--surface);
+
+    border-top: 1px solid var(--border);
+
+    z-index: 100;
+}
+
+.nav-item {
+    flex: 1;
+
+    border: none;
+
+    background: transparent;
+    color: var(--muted);
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+.nav-item span {
+    display: block;
+
+    font-size: 20px;
+    line-height: 25px;
+}
+
+.nav-item small {
+    font-size: 11px;
+}
+
+.nav-item.active {
+    color: var(--primary);
+    font-weight: bold;
+}
