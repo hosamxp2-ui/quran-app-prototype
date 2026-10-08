@@ -1,13 +1,11 @@
-alert("تم تحميل app.js بنجاح");
 document.addEventListener("DOMContentLoaded", () => {
 
+    const app = document.getElementById("app");
     const surahList = document.getElementById("surahList");
     const themeButton = document.getElementById("themeButton");
     const continueButton = document.getElementById("continueButton");
 
-    /*
-     * التأكد من وجود بيانات القرآن
-     */
+
     if (
         typeof QURAN_DATA === "undefined" ||
         !QURAN_DATA.surahs
@@ -18,9 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     <h3 class="surah-name">
                         تعذر تحميل بيانات القرآن
                     </h3>
-                    <p class="surah-details">
-                        يرجى التأكد من ملف quran.js
-                    </p>
                 </div>
             </div>
         `;
@@ -30,21 +25,82 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     /*
+     * الصفحة الرئيسية
+     */
+    function renderHome() {
+
+        app.innerHTML = `
+
+            <section class="welcome-card">
+
+                <span class="welcome-icon">﷽</span>
+
+                <h2>بسم الله الرحمن الرحيم</h2>
+
+                <p>
+                    القرآن الكريم
+                </p>
+
+                <button
+                    id="continueButton"
+                    class="primary-button">
+                    متابعة القراءة
+                </button>
+
+            </section>
+
+
+            <section class="section">
+
+                <div class="section-title">
+                    <h2>المصحف</h2>
+                </div>
+
+                <div id="surahList" class="surah-list">
+                </div>
+
+            </section>
+        `;
+
+
+        const newSurahList =
+            document.getElementById("surahList");
+
+
+        const newContinueButton =
+            document.getElementById("continueButton");
+
+
+        renderSurahs(newSurahList);
+
+
+        newContinueButton.addEventListener(
+            "click",
+            continueReading
+        );
+    }
+
+
+    /*
      * عرض السور
      */
-    function renderSurahs() {
+    function renderSurahs(container) {
 
-        surahList.innerHTML = "";
+        container.innerHTML = "";
+
 
         QURAN_DATA.surahs.forEach((surah) => {
 
-            const card = document.createElement("button");
+            const card =
+                document.createElement("button");
 
             card.className = "surah-card";
 
             card.type = "button";
 
+
             card.innerHTML = `
+
                 <div class="surah-number">
                     ${surah.id}
                 </div>
@@ -62,36 +118,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     </p>
 
                 </div>
+
             `;
 
 
-            /*
-             * عند اختيار سورة
-             */
-            card.addEventListener("click", () => {
-
-                localStorage.setItem(
-                    "lastSurah",
-                    String(surah.id)
-                );
-
-                openSurah(surah);
-
-            });
+            card.addEventListener(
+                "click",
+                () => openSurah(surah)
+            );
 
 
-            surahList.appendChild(card);
-
+            container.appendChild(card);
         });
-
     }
 
 
     /*
      * فتح السورة
-     *
-     * في هذه المرحلة لا نفتح المصحف بعد.
-     * سنضيف شاشة القراءة في الخطوة القادمة.
      */
     function openSurah(surah) {
 
@@ -100,26 +143,85 @@ document.addEventListener("DOMContentLoaded", () => {
             String(surah.id)
         );
 
-        alert(
-            `تم اختيار سورة ${surah.name}\n\n` +
-            `الرواية: ${QURAN_DATA.riwayah.name}\n` +
-            `عدد الآيات: ${surah.ayahCount}`
-        );
 
+        app.innerHTML = `
+
+            <section class="section">
+
+                <button
+                    id="backButton"
+                    class="primary-button">
+                    ← العودة إلى السور
+                </button>
+
+
+                <div class="welcome-card">
+
+                    <span class="welcome-icon">
+                        ﷽
+                    </span>
+
+                    <h2>
+                        سورة ${surah.name}
+                    </h2>
+
+                    <p>
+                        ${surah.revelation}
+                        •
+                        ${surah.ayahCount} آية
+                    </p>
+
+                </div>
+
+
+                <div class="section">
+
+                    <div class="surah-card">
+
+                        <div class="surah-info">
+
+                            <h3 class="surah-name">
+                                شاشة القراءة
+                            </h3>
+
+                            <p class="surah-details">
+                                سيتم هنا عرض آيات السورة
+                                في الخطوة التالية.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+        `;
+
+
+        document
+            .getElementById("backButton")
+            .addEventListener(
+                "click",
+                renderHome
+            );
     }
 
 
     /*
-     * متابعة آخر قراءة
+     * متابعة القراءة
      */
-    continueButton.addEventListener("click", () => {
+    function continueReading() {
 
         const lastSurahId =
             localStorage.getItem("lastSurah");
 
+
         if (!lastSurahId) {
 
-            alert("لم يتم تحديد موضع قراءة سابق بعد.");
+            alert(
+                "لم يتم تحديد موضع قراءة سابق بعد."
+            );
 
             return;
         }
@@ -135,8 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (surah) {
             openSurah(surah);
         }
-
-    });
+    }
 
 
     /*
@@ -144,33 +245,39 @@ document.addEventListener("DOMContentLoaded", () => {
      */
     themeButton.addEventListener("click", () => {
 
-        document.body.classList.toggle("dark-mode");
+        document.body.classList.toggle(
+            "dark-mode"
+        );
+
 
         const dark =
-            document.body.classList.contains("dark-mode");
+            document.body.classList.contains(
+                "dark-mode"
+            );
+
 
         localStorage.setItem(
             "darkMode",
             dark ? "1" : "0"
         );
-
     });
 
 
     /*
-     * استعادة الوضع السابق
+     * استعادة الوضع الليلي
      */
-    const savedDarkMode =
-        localStorage.getItem("darkMode");
-
-    if (savedDarkMode === "1") {
-        document.body.classList.add("dark-mode");
+    if (
+        localStorage.getItem("darkMode") === "1"
+    ) {
+        document.body.classList.add(
+            "dark-mode"
+        );
     }
 
 
     /*
-     * تشغيل عرض السور
+     * التشغيل الأول
      */
-    renderSurahs();
+    renderHome();
 
 });
